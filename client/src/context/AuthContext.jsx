@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       return
     }
 
-    axios.get('http://localhost:5000/api/auth/user', {
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/auth/user`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
