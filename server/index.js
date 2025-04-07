@@ -10,7 +10,11 @@ const { verifyToken } = require('./middleware/auth')
 dotenv.config()
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: "https://ai-summarizer-flame-tau.vercel.app/", // ✅ Replace with your actual frontend Vercel URL
+  credentials: true
+}));
+
 app.use(express.json())
 
 app.use('/api/auth', authRoutes)
