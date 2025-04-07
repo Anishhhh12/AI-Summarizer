@@ -13,7 +13,7 @@ function Home() {
     setLoading(true)
     setSummary('')
     try {
-      const res = await axios.post('http://localhost:5000/api/summarize', { text }, {
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/summarize`, { text }, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setSummary(res.data.summary)
