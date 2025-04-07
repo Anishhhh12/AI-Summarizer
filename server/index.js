@@ -4,7 +4,7 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const authRoutes = require('./routes/auth')
 const summarizeRoute = require('./routes/summarize')
-const feedbackRoute = require('./routes/Feedback')
+const feedbackRoute = require('./routes/feedback')
 const { verifyToken } = require('./middleware/auth')
 
 dotenv.config()
