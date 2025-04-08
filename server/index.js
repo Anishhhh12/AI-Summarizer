@@ -11,9 +11,10 @@ dotenv.config()
 const app = express()
 
 app.use(cors({
-  origin: "https://ai-summarizer-flame-tau.vercel.app/", // ✅ Replace with your actual frontend Vercel URL
+  origin: "https://ai-summarizer-flame-tau.vercel.app",
   credentials: true
 }));
+
 
 app.use(express.json())
 
