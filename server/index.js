@@ -10,10 +10,23 @@ const { verifyToken } = require('./middleware/auth')
 dotenv.config()
 const app = express()
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ai-summarizer-flame-tau.vercel.app",
+  "https://ai-summarizer-pnavzgs5p-anishhhh12s-projects.vercel.app", // 👈 new one
+];
+
 app.use(cors({
-  origin: "https://ai-summarizer-flame-tau.vercel.app",
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 }));
+
 
 
 app.use(express.json())
