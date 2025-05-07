@@ -15,7 +15,7 @@ function Summarizer() {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/summarize', {
+      const res = await axios.post(import.meta.env.VITE_API_BASE_URL+'/api/summarize', {
         text: input,
       });
       setSummary(res.data.summary);
