@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import FeedbackPage from "./pages/FeedbackPage";
-import SummarizerPage from "./pages/SummarizerPage";
+import SummarizerPage from "./pages/summarizerPage";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
