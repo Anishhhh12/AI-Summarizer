@@ -7,9 +7,10 @@ require("dotenv").config();
 const app = express();
 
 // MongoDB setup
-mongoose.connect("mongodb://localhost:27017/feedbackdb", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log("MongoDB connection error:", err));
+  .catch((err) => console.error("MongoDB connection error:", err));
+
 
 // Define feedback schema
 const feedbackSchema = new mongoose.Schema({
