@@ -16,7 +16,7 @@ export default function FeedbackPage() {
     }
 
     try {
-      const response = await axios.post(import.meta.env.VITE_API_BASE_URL+'/api/feedback', {
+      const response = await axios.post(import.meta.env.VITE_API_BASE_URL+'api/feedback', {
         rating,
         feedback,
       });
