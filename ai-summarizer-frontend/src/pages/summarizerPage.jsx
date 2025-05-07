@@ -1,4 +1,4 @@
-import Summarizer from './components/summarizer';
+import Summarizer from '../components/summarizer';
 
 export default function SummarizerPage() {
   return (
