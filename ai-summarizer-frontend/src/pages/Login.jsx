@@ -26,7 +26,7 @@ function Login() {
 
       if (updatedUser.emailVerified) {
         setTimeout(() => {}, 100);
-        // User will be redirected by useEffect
+        navigate('/');
       } else {
         setError("Please verify your email first.");
       }
@@ -51,7 +51,6 @@ function Login() {
       if (isVerified) {
         // Give AuthContext time to update, redirect handled by useEffect
         setTimeout(() => {}, 100);
-        navigate("/");
       } else {
         setError("Please verify your email before logging in.");
       }
