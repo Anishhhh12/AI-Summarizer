@@ -24,7 +24,22 @@ export const signUpWithEmail = (email, password) => createUserWithEmailAndPasswo
 export const signInWithEmail = (email, password) => signInWithEmailAndPassword(auth, email, password);
 export const googleSignIn = () => signInWithPopup(auth, googleProvider);
 export const sendResetPasswordEmail = (email) => sendPasswordResetEmail(auth, email);
-export const sendEmailVerificationFunc = () => sendEmailVerification(auth.currentUser); // Changed the name to avoid conflicts
+export const sendEmailVerificationFunc = async () => {
+  const user = auth.currentUser;
+
+  if (user && !user.emailVerified) {
+    try {
+      await sendEmailVerification(user);
+      return true;
+    } catch (error) {
+      console.error("Failed to send verification email:", error);
+      throw error;
+    }
+  } else {
+    throw new Error("No user is signed in or email already verified.");
+  }
+};
+
 export const logout = () => signOut(auth);
 
 export default auth;
