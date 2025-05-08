@@ -25,7 +25,7 @@ function Login() {
 
     try {
       await signInWithEmail(email, password);
-      // const auth = getAuth();
+      const auth = getAuth();
       // await auth.currentUser.reload();
 
       if (auth.currentUser.emailVerified) {
