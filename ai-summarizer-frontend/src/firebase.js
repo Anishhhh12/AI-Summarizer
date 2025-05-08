@@ -28,8 +28,13 @@ export const sendEmailVerificationFunc = async () => {
   const user = auth.currentUser;
 
   if (user && !user.emailVerified) {
+    const actionCodeSettings = {
+      url: `${window.location.origin}/login`, // Redirects to /login after verification
+      handleCodeInApp: false,
+    };
+
     try {
-      await sendEmailVerification(user);
+      await sendEmailVerification(user, actionCodeSettings);
       return true;
     } catch (error) {
       console.error("Failed to send verification email:", error);
@@ -39,6 +44,7 @@ export const sendEmailVerificationFunc = async () => {
     throw new Error("No user is signed in or email already verified.");
   }
 };
+
 
 export const logout = () => signOut(auth);
 
