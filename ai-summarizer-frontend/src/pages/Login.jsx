@@ -13,12 +13,6 @@ function Login() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Auto-redirect to homepage if already logged in
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
 
   const handleLogin = async () => {
     setError("");
@@ -31,6 +25,7 @@ function Login() {
       const updatedUser = auth.currentUser;
 
       if (updatedUser.emailVerified) {
+        setTimeout(() => {}, 100);
         // User will be redirected by useEffect
       } else {
         setError("Please verify your email first.");
@@ -56,6 +51,7 @@ function Login() {
       if (isVerified) {
         // Give AuthContext time to update, redirect handled by useEffect
         setTimeout(() => {}, 100);
+        navigate("/");
       } else {
         setError("Please verify your email before logging in.");
       }
