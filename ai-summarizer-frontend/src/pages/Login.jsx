@@ -1,10 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import {
-  signInWithEmail,
-  googleSignIn,
-  sendEmailVerificationFunc,
-  logout
-} from "../firebase";
+import { signInWithEmail, googleSignIn } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { getAuth } from "firebase/auth";
@@ -16,83 +11,35 @@ function Login() {
   const [error, setError] = useState("");
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
-  const [resendVisible, setResendVisible] = useState(false);
-  const [resendStatus, setResendStatus] = useState("");
-  const [resending, setResending] = useState(false);
-  const [verifiedPromptVisible, setVerifiedPromptVisible] = useState(false);
-
   const navigate = useNavigate();
 
+  // ✅ Auto-redirect to homepage if already logged in
   useEffect(() => {
-    if (user) navigate("/");
+    if (user) {
+      navigate("/");
+    }
   }, [user, navigate]);
 
   const handleLogin = async () => {
     setError("");
-    setResendVisible(false);
-    setResendStatus("");
-    setVerifiedPromptVisible(false);
     setLoadingLogin(true);
-
-    if (!email || !password) {
-      setError("Please enter both email and password.");
-      setLoadingLogin(false);
-      return;
-    }
-
     try {
       await signInWithEmail(email, password);
+
       const auth = getAuth();
       await auth.currentUser.reload();
+      const updatedUser = auth.currentUser;
 
-      if (auth.currentUser.emailVerified) {
-        setTimeout(() => {
-          navigate("/");
-        }, 100);
+      if (updatedUser.emailVerified) {
+        // User will be redirected by useEffect
       } else {
         setError("Please verify your email first.");
-        setResendVisible(true);
       }
     } catch (err) {
-      console.error(err);
       setError("Failed to sign in. Please try again.");
     } finally {
       setLoadingLogin(false);
     }
-  };
-
-  const handleResendVerification = async () => {
-    setResending(true);
-    setResendStatus("");
-
-    try {
-      const auth = getAuth();
-      await auth.currentUser.reload();
-
-      if (auth.currentUser && !auth.currentUser.emailVerified) {
-        await sendEmailVerificationFunc();
-        setResendStatus("Verification email sent.");
-        setVerifiedPromptVisible(true);
-        await logout(); // ❗ Log out so the user must log in again after verifying
-      } else {
-        setResendStatus("Email is already verified.");
-      }
-    } catch (err) {
-      console.error(err);
-      setResendStatus("Failed to resend verification email.");
-    } finally {
-      setResending(false);
-    }
-  };
-
-  const handleYesVerification = () => {
-    setTimeout(() => {
-      window.location.reload(); // 🔄 Just reload; user is logged out, so won't auto-login
-    }, 100);
-  };
-
-  const handleNoVerification = () => {
-    setVerifiedPromptVisible(false);
   };
 
   const handleGoogleLogin = async () => {
@@ -107,9 +54,8 @@ function Login() {
         result?.user?.providerData[0]?.providerId === "google.com";
 
       if (isVerified) {
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 100);
+        // Give AuthContext time to update, redirect handled by useEffect
+        setTimeout(() => {}, 100);
       } else {
         setError("Please verify your email before logging in.");
       }
@@ -128,39 +74,6 @@ function Login() {
 
         {error && <p className="text-red-600 text-sm mb-4 text-center">{error}</p>}
 
-        {resendVisible && (
-          <div className="text-center mb-3">
-            <button
-              onClick={handleResendVerification}
-              className="text-blue-600 text-sm hover:underline"
-              disabled={resending}
-            >
-              {resending ? "Sending..." : "Resend Verification Email"}
-            </button>
-            {resendStatus && (
-              <p className="text-green-600 text-sm mt-1">{resendStatus}</p>
-            )}
-          </div>
-        )}
-
-        {verifiedPromptVisible && (
-          <div className="text-center mb-3">
-            <p className="text-blue-600 text-sm mb-3">Did you verify your email?</p>
-            <button
-              onClick={handleYesVerification}
-              className="text-green-600 text-sm hover:underline mb-1"
-            >
-              Yes
-            </button>
-            <button
-              onClick={handleNoVerification}
-              className="text-red-600 text-sm hover:underline"
-            >
-              No
-            </button>
-          </div>
-        )}
-
         <input
           type="email"
           value={email}
@@ -176,7 +89,6 @@ function Login() {
           placeholder="Password"
           className="w-full px-4 py-2 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-
         <div className="flex justify-center mb-4">
           <button
             onClick={() => navigate("/forgot-password")}
