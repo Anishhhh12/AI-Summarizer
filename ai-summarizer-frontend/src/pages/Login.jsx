@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { signInWithEmail, googleSignIn, sendEmailVerificationFunc } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
