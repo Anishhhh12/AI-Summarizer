@@ -1,5 +1,10 @@
 import { useState, useContext, useEffect } from "react";
-import { signInWithEmail, googleSignIn, sendEmailVerificationFunc } from "../firebase";
+import {
+  signInWithEmail,
+  googleSignIn,
+  sendEmailVerificationFunc,
+  logout
+} from "../firebase";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { getAuth } from "firebase/auth";
@@ -14,23 +19,26 @@ function Login() {
   const [resendVisible, setResendVisible] = useState(false);
   const [resendStatus, setResendStatus] = useState("");
   const [resending, setResending] = useState(false);
-  const [verifiedPromptVisible, setVerifiedPromptVisible] = useState(false); // Track "Yes/No" prompt visibility
+  const [verifiedPromptVisible, setVerifiedPromptVisible] = useState(false);
 
   const navigate = useNavigate();
 
-  // ✅ Auto-redirect to homepage if already logged in
   useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
+    if (user) navigate("/");
   }, [user, navigate]);
 
   const handleLogin = async () => {
     setError("");
     setResendVisible(false);
     setResendStatus("");
-    setVerifiedPromptVisible(false); // Reset the prompt visibility
+    setVerifiedPromptVisible(false);
     setLoadingLogin(true);
+
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      setLoadingLogin(false);
+      return;
+    }
 
     try {
       await signInWithEmail(email, password);
@@ -38,11 +46,12 @@ function Login() {
       await auth.currentUser.reload();
 
       if (auth.currentUser.emailVerified) {
-        setTimeout(() => {}, 100);
-        navigate("/"); // Redirect if email is verified
+        setTimeout(() => {
+          navigate("/");
+        }, 100);
       } else {
         setError("Please verify your email first.");
-        setResendVisible(true); // Show resend link if not verified
+        setResendVisible(true);
       }
     } catch (err) {
       console.error(err);
@@ -63,9 +72,8 @@ function Login() {
       if (auth.currentUser && !auth.currentUser.emailVerified) {
         await sendEmailVerificationFunc();
         setResendStatus("Verification email sent.");
-        setVerifiedPromptVisible(true); // Show the "Yes/No" prompt after sending email
-
-        // Optionally, you can auto-redirect after some time if the user clicks Yes
+        setVerifiedPromptVisible(true);
+        await logout(); // ❗ Log out so the user must log in again after verifying
       } else {
         setResendStatus("Email is already verified.");
       }
@@ -78,12 +86,13 @@ function Login() {
   };
 
   const handleYesVerification = () => {
-    window.location.reload(); 
+    setTimeout(() => {
+      window.location.reload(); // 🔄 Just reload; user is logged out, so won't auto-login
+    }, 100);
   };
-  
 
   const handleNoVerification = () => {
-    setVerifiedPromptVisible(false); // Hide the prompt if user says No
+    setVerifiedPromptVisible(false);
   };
 
   const handleGoogleLogin = async () => {
@@ -98,8 +107,9 @@ function Login() {
         result?.user?.providerData[0]?.providerId === "google.com";
 
       if (isVerified) {
-        // Give AuthContext time to update, redirect handled by useEffect
-        setTimeout(() => {}, 100);
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 100);
       } else {
         setError("Please verify your email before logging in.");
       }
