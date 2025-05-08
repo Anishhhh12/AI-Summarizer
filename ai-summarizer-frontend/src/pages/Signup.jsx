@@ -16,6 +16,7 @@ export default function Signup() {
       await signUpWithEmail(email, password);
       await sendEmailVerificationFunc();
       alert("Please verify your email before logging in.");
+      setTimeout(() => {}, 100);
       navigate("/login");
     } catch (err) {
       setError("Failed to sign up. Please try again.");
