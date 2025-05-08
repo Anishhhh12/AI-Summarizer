@@ -30,10 +30,11 @@ function Login() {
   
       if (updatedUser.emailVerified) {
         // ✅ Redirect and force reload
-        navigate("/");
+        
         setTimeout(() => {
           window.location.reload(); // Hard reload the page
         }, 500);
+        navigate("/");
       } else {
         setError("Please verify your email first.");
       }
