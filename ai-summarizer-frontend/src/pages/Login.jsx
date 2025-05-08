@@ -25,8 +25,8 @@ function Login() {
 
     try {
       await signInWithEmail(email, password);
-      const auth = getAuth();
-      await auth.currentUser.reload();
+      // const auth = getAuth();
+      // await auth.currentUser.reload();
 
       if (auth.currentUser.emailVerified) {
         navigate("/");
