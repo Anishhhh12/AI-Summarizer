@@ -3,7 +3,6 @@ import { signInWithEmail, googleSignIn } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import { getAuth } from "firebase/auth"; // ADD THIS at the top with other imports
-import { sendEmailVerificationFunc } from "../firebase"; // ⬅ Import this function
 
 function Login() {
   const { user } = useContext(AuthContext);
@@ -13,31 +12,26 @@ function Login() {
   const [loadingLogin, setLoadingLogin] = useState(false);  // Loading state for normal login
   const [loadingGoogle, setLoadingGoogle] = useState(false);  // Loading state for Google login
   const navigate = useNavigate();
-  const [unverified, setUnverified] = useState(false); // ⬅ New state
-  const [resendMessage, setResendMessage] = useState(""); // ⬅ Resend status
-  const [resending, setResending] = useState(false); // ⬅ For button state
 
   const handleLogin = async () => {
     setError("");
-    setUnverified(false);
-    setResendMessage("");
-    setLoadingLogin(true);
-
+    setLoadingLogin(true); // Set loading state to true for normal login
     try {
       await signInWithEmail(email, password);
-      const auth = getAuth();
-      // await auth.currentUser.reload();
 
-      if (auth.currentUser.emailVerified) {
+      const auth = getAuth();
+      await auth.currentUser.reload(); // 🔄 Refresh current user state
+      const updatedUser = auth.currentUser;
+
+      if (updatedUser.emailVerified) {
         navigate("/");
       } else {
-        setUnverified(true); // ⬅ Set flag
-        setError("Email not verified.");
+        setError("Please verify your email first.");
       }
     } catch (err) {
       setError("Failed to sign in. Please try again.");
     } finally {
-      setLoadingLogin(false);
+      setLoadingLogin(false); // Reset loading state for normal login
     }
   };
 
@@ -58,19 +52,6 @@ function Login() {
       setError(err.message || "Google login failed.");
     } finally {
       setLoadingGoogle(false); // Reset loading state for Google login
-    }
-  };
-
-  const handleResendVerification = async () => {
-    setResending(true);
-    setResendMessage("");
-    try {
-      await sendEmailVerificationFunc();
-      setResendMessage("Verification email sent. Please check your inbox.");
-    } catch (err) {
-      setResendMessage("Failed to resend verification email.try again after some time");
-    } finally {
-      setResending(false);
     }
   };
 
@@ -124,21 +105,6 @@ function Login() {
         >
           {loadingGoogle ? "Logging in with Google..." : "Log In with Google"}
         </button>
-        {unverified && (
-          <div className="text-center mt-3">
-            <button
-              onClick={handleResendVerification}
-              className="text-blue-600 hover:underline text-sm"
-              disabled={resending}
-            >
-              {resending ? "Sending..." : "Resend Verification Email"}
-            </button>
-            {resendMessage && (
-              <p className="text-green-600 text-sm mt-2">{resendMessage}</p>
-            )}
-          </div>
-        )}
-
       </div>
     </div>
   );
