@@ -61,8 +61,9 @@ function Login() {
 
       if (isVerified) {
         // Give AuthContext time to update, redirect handled by useEffect
-        setTimeout(() => {}, 100);
-        navigate("/");
+        setTimeout(() => {
+          window.location.reload(); // Hard reload the page
+        }, 500);
       } else {
         setError("Please verify your email before logging in.");
       }
