@@ -68,7 +68,7 @@ function Login() {
       await sendEmailVerificationFunc();
       setResendMessage("Verification email sent. Please check your inbox.");
     } catch (err) {
-      setResendMessage("Failed to resend verification email.");
+      setResendMessage("Failed to resend verification email.try again after some time");
     } finally {
       setResending(false);
     }
