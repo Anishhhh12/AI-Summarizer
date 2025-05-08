@@ -5,7 +5,6 @@ import AuthContext from "../context/AuthContext";
 import { getAuth } from "firebase/auth";
 
 function Login() {
-  const { user } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -13,29 +12,41 @@ function Login() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const navigate = useNavigate();
 
+  
+
+  
+
 
   const handleLogin = async () => {
     setError("");
     setLoadingLogin(true);
     try {
       await signInWithEmail(email, password);
-
+  
       const auth = getAuth();
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Allow Firebase to update
       await auth.currentUser.reload();
       const updatedUser = auth.currentUser;
-
+  
       if (updatedUser.emailVerified) {
-        setTimeout(() => {}, 100);
-        navigate('/');
+        // ✅ Redirect and force reload
+        navigate("/");
+        setTimeout(() => {
+          window.location.reload(); // Hard reload the page
+        }, 500);
       } else {
         setError("Please verify your email first.");
       }
     } catch (err) {
+      console.error(err);
       setError("Failed to sign in. Please try again.");
     } finally {
       setLoadingLogin(false);
     }
   };
+  
+
+  
 
   const handleGoogleLogin = async () => {
     setError("");
@@ -51,6 +62,7 @@ function Login() {
       if (isVerified) {
         // Give AuthContext time to update, redirect handled by useEffect
         setTimeout(() => {}, 100);
+        navigate("/");
       } else {
         setError("Please verify your email before logging in.");
       }
