@@ -9,18 +9,23 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user?.emailVerified) {
-        setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await user.reload(); // 🔁 Force fresh emailVerified state
+        if (user.emailVerified) {
+          setUser(user);
+        } else {
+          setUser(null);
+        }
       } else {
         setUser(null);
       }
       setLoading(false);
     });
-    
-
+  
     return unsubscribe;
   }, []);
+  
 
   return (
     <AuthContext.Provider value={{ user, loading }}>
