@@ -38,6 +38,7 @@ function Login() {
       await auth.currentUser.reload();
 
       if (auth.currentUser.emailVerified) {
+        setTimeout(() => {}, 100);
         navigate("/"); // Redirect if email is verified
       } else {
         setError("Please verify your email first.");
