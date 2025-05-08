@@ -18,6 +18,13 @@ function Login() {
 
   const navigate = useNavigate();
 
+  // ✅ Auto-redirect to homepage if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
   const handleLogin = async () => {
     setError("");
     setResendVisible(false);
@@ -84,10 +91,14 @@ function Login() {
 
     try {
       const result = await googleSignIn();
-      const isVerified = result?.user?.emailVerified;
 
-      if (isVerified || result?.user?.providerData[0]?.providerId === "google.com") {
-        navigate("/");  // Redirect to home if email is verified
+      const isVerified =
+        result?.user?.emailVerified ||
+        result?.user?.providerData[0]?.providerId === "google.com";
+
+      if (isVerified) {
+        // Give AuthContext time to update, redirect handled by useEffect
+        setTimeout(() => {}, 100);
       } else {
         setError("Please verify your email before logging in.");
       }
