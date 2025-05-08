@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 .animated-gradient {
-    background: linear-gradient(-45deg, #fceabb, #e8f0fe, #d3eefd, #fcd1f6);
+    background: linear-gradient(-45deg, #e9bc4a, #a3c5ff, #81ffa5, #ffabf4);
     background-size: 400% 400%;
     animation: gradientMove 15s ease infinite;
   }
