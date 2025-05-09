@@ -37,6 +37,7 @@ The **AI Summarizer** is a full-stack web application designed to provide text s
 
 ### File Structure
 
+```
 ai-summarizer/
 │
 ├── ai-summarizer-frontend/     # React frontend (Vite)
@@ -60,6 +61,7 @@ ai-summarizer/
 │   └── node_modules/           # Backend dependencies
 │
 └── README.md                   # Project documentation
+```
 
 
 
