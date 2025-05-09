@@ -4,14 +4,16 @@
 
 1. [Project Overview](#project-overview)
 2. [Features](#features)
-3. [Tech Stack](#tech-stack)
-4. [Installation](#installation)
-5. [Usage](#usage)
-6. [API Integration](#api-integration)
-7. [Authentication](#authentication)
-8. [Token Limits, API Call Limitations, and Error Handling](#token-limits-api-call-limitations-and-error-handling)
-9. [Contributing](#contributing)
-10. [License](#license)
+3. [File Structure](#file-structure)
+4. [Tech Stack](#tech-stack)
+5. [Installation](#installation)
+6. [Usage](#usage)
+7. [API Integration](#api-integration)
+8. [Authentication](#authentication)
+9. [Token Limits, API Call Limitations, and Error Handling](#token-limits-api-call-limitations-and-error-handling)
+10. [Contributing](#contributing)
+11. [To-Do](#to-do)
+12. [License](#license)
 
 ---
 
@@ -32,6 +34,35 @@ The **AI Summarizer** is a full-stack web application designed to provide text s
 - **Future Updates:** Multilingual support and advanced features will be added in future releases.
 
 ---
+
+### File Structure
+
+ai-summarizer/
+│
+├── ai-summarizer-frontend/     # React frontend (Vite)
+│   ├── public/                 # Static assets
+│   ├── src/
+│   │   ├── assets/             # Images or media
+│   │   ├── components/         # Reusable UI components (e.g., Auth, Summarizer)
+│   │   ├── context/            # React context (e.g., AuthContext)
+│   │   ├── pages/              # Page-level components (Login, Signup, Home, etc.)
+│   │   ├── App.jsx             # Main App entry
+│   │   ├── main.jsx            # React DOM rendering
+│   │   ├── firebase.js         # Firebase config and auth setup
+│   │   └── index.css           # Global styles
+│   ├── tailwind.config.js      # TailwindCSS config
+│   ├── vercel.json             # Vercel deployment config
+│   └── vite.config.js          # Vite project config
+│
+├── BACKEND/                    # Node.js backend
+│   ├── index.js                # API route and Cohere integration
+│   ├── .env                    # Environment variables (API keys)
+│   └── node_modules/           # Backend dependencies
+│
+└── README.md                   # Project documentation
+
+
+
 
 ### Tech Stack
 
@@ -159,6 +190,16 @@ We welcome contributions to the AI Summarizer project. To contribute:
 3. Make your changes.
 4. Open a pull request with a description of the changes.
 
+---
+
+## To-Do
+
+- [x] Set up frontend with Vite + TailwindCSS  
+- [x] Integrate Firebase Authentication (email/password, Google)  
+- [x] Implement summarization using Cohere API  
+- [ ] Add user summary history with backend storage  
+- [ ] Deploy app to Vercel (frontend) and Render (backend)
+      
 ---
 
 ### License
