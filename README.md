@@ -80,6 +80,7 @@ cd ai-summarizer
 
    - **Backend (.env):**
      - `COHERE_API_KEY`
+     - `MONGO_URI`
 
 5. **Start the application:**
 
