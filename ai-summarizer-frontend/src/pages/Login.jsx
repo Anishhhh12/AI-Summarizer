@@ -11,10 +11,14 @@ function Login() {
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
-  
-
-  
+ // ✅ Redirect if already logged in and verified
+ useEffect(() => {
+  if (user) {
+    navigate("/summarizer");
+  }
+}, [user, navigate]);
 
 
   const handleLogin = async () => {
@@ -34,7 +38,8 @@ function Login() {
         setTimeout(() => {
           window.location.reload(); // Hard reload the page
         }, 500);
-        navigate("/");
+        navigate("/summarizer");
+        
       } else {
         setError("Please verify your email first.");
       }
@@ -62,9 +67,8 @@ function Login() {
 
       if (isVerified) {
         // Give AuthContext time to update, redirect handled by useEffect
-        setTimeout(() => {
-          window.location.reload(); // Hard reload the page
-        }, 500);
+        setTimeout(() => {}, 100);
+        navigate("/");
       } else {
         setError("Please verify your email before logging in.");
       }
