@@ -52,7 +52,7 @@ The **AI Summarizer** is a full-stack web application designed to provide text s
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/ai-summarizer.git
+git clone https://github.com/Anishhhh12/AI-Summarizer
 cd ai-summarizer
 ```
 
