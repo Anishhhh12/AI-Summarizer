@@ -37,7 +37,7 @@ function Login() {
         
         setTimeout(() => {
           window.location.reload(); // Hard reload the page
-        }, 500);
+        }, 100);
         navigate("/summarizer");
         
       } else {
